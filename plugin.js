@@ -9,7 +9,11 @@
 var g_imprecise_word_list = [
     "all",
     "some",
-    "the"
+    "the",
+    "is",
+    "and",
+    "not",
+    "to"
 ];
 
 /**
@@ -19,7 +23,7 @@ var g_imprecise_word_list = [
  */
 
 var g_configuration = {
-    "xpath_selector": "//span/font|//span/p"
+    "xpath_selector": "//span[@class='comment']/font|//span/p/font[not(.//u)]"
 };
 
 var word_marker = {
@@ -62,7 +66,7 @@ var word_marker = {
                 current_html_words,
                 this.marked_word
             );
-            new_inner_html = current_marked_words.join(" ");
+            new_inner_html = current_marked_words.join("");
             current_node.innerHTML = new_inner_html;
         }
     },
@@ -72,11 +76,11 @@ var word_marker = {
      */
     word_list: function(innerHTML) {
         console.log("Splitig: " + innerHTML);
-        return innerHTML.split(/\W/);
+        return innerHTML.split(/\b/);
     },
 
     marked_word: function(word) {
-        if (g_imprecise_word_list.indexOf(word) > -1) {
+        if (g_imprecise_word_list.indexOf(word.toLowerCase()) > -1) {
             return "<span class=\"imprecise\">" + word + "</span>";
         } 
         return word;
