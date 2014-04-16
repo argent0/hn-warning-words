@@ -9,7 +9,7 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["https://news.ycombinator.com/item?id=*"],
+			"matches": ["https://news.ycombinator.com/*"],
 			"css": ["plugin.css"],
 			"js": ["underscore-min.js", "plugin.js"],
 			"run-at": "document_idle"

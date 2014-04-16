@@ -50,7 +50,7 @@ var word_marker = {
         for(paragraph_index = 0; paragraph_index < paragraph_list.length; ++paragraph_index) {
             current_node = paragraph_list[paragraph_index];
             current_text = current_node.innerHTML;
-            current_node.innerHTML = "<strong>" + current_text + "</strong>";
+            current_node.innerHTML = "<span class=\"imprecise\">" + current_text + "</span>";
         }
     }
 };
