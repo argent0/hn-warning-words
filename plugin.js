@@ -8,12 +8,22 @@
  */
 var g_imprecise_word_list = [
     "all",
+    "always",
+    "bad",
+    "best",
+    "better",
+    "correct",
+    "difficult",
+    "easy",
+    "everybody",
+    "good",
+    "never",
+    "new",
+    "old",
+    "nobody",
+    "nothing",
     "some",
-    "the",
-    "is",
-    "and",
-    "not",
-    "to"
+    "worst"
 ];
 
 /**
