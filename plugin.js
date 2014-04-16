@@ -8,7 +8,8 @@
  */
 var g_imprecise_word_list = [
     "all",
-    "some"
+    "some",
+    "the"
 ];
 
 /**
@@ -41,18 +42,46 @@ var word_marker = {
         return this.nodes_mathing_xpath_(g_configuration.xpath_selector);
     },
 
+    /**
+     * Marks the imprecise words
+     */
     markdown: function() {
         var paragraph_index = 0,
             paragraph_list = this.paragraph_list_(),
-            current_text,
-            current_node;
+            current_html,
+            current_node,
+            current_marked_words,
+            current_html_words,
+            new_inner_html;
 
         for(paragraph_index = 0; paragraph_index < paragraph_list.length; ++paragraph_index) {
             current_node = paragraph_list[paragraph_index];
-            current_text = current_node.innerHTML;
-            current_node.innerHTML = "<span class=\"imprecise\">" + current_text + "</span>";
+            current_html = current_node.innerHTML;
+            current_html_words = this.word_list(current_html);
+            current_marked_words = _.map(
+                current_html_words,
+                this.marked_word
+            );
+            new_inner_html = current_marked_words.join(" ");
+            current_node.innerHTML = new_inner_html;
         }
+    },
+
+    /**
+     * Split an innterHTML element to its words and returns a list
+     */
+    word_list: function(innerHTML) {
+        console.log("Splitig: " + innerHTML);
+        return innerHTML.split(/\W/);
+    },
+
+    marked_word: function(word) {
+        if (g_imprecise_word_list.indexOf(word) > -1) {
+            return "<span class=\"imprecise\">" + word + "</span>";
+        } 
+        return word;
     }
+
 };
 
 console.log(word_marker.markdown());
