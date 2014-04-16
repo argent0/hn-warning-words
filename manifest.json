@@ -14,9 +14,5 @@
 			"js": ["underscore-min.js", "plugin.js"],
 			"run-at": "document_idle"
 		}
-	],
-	"permissions": [
-		"https://secure.flicker.com/",
-		"https://news.ycombinator.com/item?id=*"
 	]
 }
