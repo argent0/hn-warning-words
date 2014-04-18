@@ -1,42 +1,40 @@
 /*jslint nomen: true, browser: true, devel: true */
 /*global XPathResult:false, _:false*/
 
-/**
- * Global variable containing the default list of imprecise words
- *
- * @type {array}
- */
-var g_imprecise_word_list = [
-    "all",
-    "always",
-    "bad",
-    "best",
-    "better",
-    "correct",
-    "difficult",
-    "easy",
-    "everybody",
-    "good",
-    "never",
-    "new",
-    "old",
-    "nobody",
-    "nothing",
-    "some",
-    "worst"
-];
-
-/**
- * Global object containg some configurations
- *
- * @type {Object}
- */
-
-var g_configuration = {
-    "xpath_selector": "//span[@class='comment']/font|//span/p/font[not(.//u)]"
-};
 
 var word_marker = {
+    /**
+     * Global object containg some configurations
+     *
+     * @type {Object}
+     */
+    g_configuration: {
+        "xpath_selector": "//span[@class='comment']/font|//span/p/font[not(.//u)]"
+    },
+    /**
+     * Global array containing the default list of imprecise words
+     *
+     * @type {array}
+     */
+    g_default_imprecise_word_list: [
+        "all",
+        "always",
+        "bad",
+        "best",
+        "better",
+        "correct",
+        "difficult",
+        "easy",
+        "everybody",
+        "good",
+        "never",
+        "new",
+        "old",
+        "nobody",
+        "nothing",
+        "some",
+        "worst"
+    ],
     nodes_mathing_xpath_: function(STR_XPATH) {
         var xresult = document.evaluate(STR_XPATH, document, null, XPathResult.ANY_TYPE, null);
         var xnodes = [];
@@ -48,12 +46,11 @@ var word_marker = {
 
         return xnodes;
     },
-
     /**
      * Returns a list of all comments text in the current comments page.
      */
     paragraph_list_: function() {
-        return this.nodes_mathing_xpath_(g_configuration.xpath_selector);
+        return this.nodes_mathing_xpath_(this.g_configuration.xpath_selector);
     },
 
     /**
@@ -89,8 +86,11 @@ var word_marker = {
         return innerHTML.split(/\b/);
     },
 
+    /**
+     * Given a word returns it marked if appropiate
+     */
     marked_word: function(word) {
-        if (g_imprecise_word_list.indexOf(word.toLowerCase()) > -1) {
+        if (this.g_imprecise_word_list.indexOf(word.toLowerCase()) > -1) {
             return "<span class=\"imprecise\">" + word + "</span>";
         } 
         return word;
