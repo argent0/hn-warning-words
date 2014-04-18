@@ -3,6 +3,7 @@
 var user_interface = {
     g_list_element_id_prefix: "wl-",
     g_word_list_id: "word-list",
+    g_word_input_field_id: "word-input-text",
     g_imprecise_word_list: [
         "all",
         "always",
@@ -31,9 +32,7 @@ var user_interface = {
                 word_list_element = word_element.parentElement;
             t.remove_word(word);
             word_list_element.removeChild(word_element);
-            t.remove_word(word);
         };
-        console.log(button_element);
         return button_element;
     },
     word_element: function(word) {
@@ -72,28 +71,32 @@ var user_interface = {
         var add_btn = document.getElementById('btn-add');
         var t = this;
         add_btn.onclick = function () {
-            t.add_word("foo");
+            var input_field_element = document.getElementById(t.g_word_input_field_id);
+            t.add_word(input_field_element.value);
             t.refresh_current_word_list();
+            console.log(t.g_imprecise_word_list);
         };
     },
     add_word: function(word) {
         var lower_case_word = word.toLowerCase();
         if (this.is_word_listed(lower_case_word)) {
+            console.log("Word already listed!");
+        } else {
             this.g_imprecise_word_list.push(lower_case_word);
             this.g_imprecise_word_list.sort();
-        } else {
-            console.log("Word already listed!");
         }
     },
     remove_word: function(word) {
         var lower_case_word = word.toLowerCase();
         if ( this.is_word_listed(lower_case_word) ) {
-            var word_index = this.g_imprecise_word_list.idexOf(lower_case_word);
+            var word_index = this.g_imprecise_word_list.indexOf(lower_case_word);
             this.g_imprecise_word_list.splice(word_index,1);
+        } else {
+            console.log("Removing non listed word: " + lower_case_word);
         }
     },
     is_word_listed: function(word) {
-        return this.g_imprecise_word_list.indexOf(word.toLowerCase()) === -1;
+        return this.g_imprecise_word_list.indexOf(word.toLowerCase()) !== -1;
     }
 };
 
