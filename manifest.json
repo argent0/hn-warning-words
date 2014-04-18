@@ -14,5 +14,6 @@
 			"js": ["underscore-min.js", "plugin.js"],
 			"run-at": "document_idle"
 		}
-	]
+	],
+	"permissions": ["storage"]
 }
