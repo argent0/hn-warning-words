@@ -35,10 +35,8 @@ var ImpreciseWordList = (function() {
         this.after_loading_local_storage_imprecise_word_list(
             function(stored_imprecise_word_list) {
             if (stored_imprecise_word_list.length > 0) {
-                console.log("Using stored imprecise word list");
                 t.g_imprecise_word_list = stored_imprecise_word_list;
             } else {
-                console.log("Using default word list");
                 t.g_imprecise_word_list = t.g_configuration.default_imprecise_word_list;
             }
             t.ready = true;
@@ -59,12 +57,10 @@ var ImpreciseWordList = (function() {
         chrome.storage.sync.get(
             this.g_configuration.g_imprecise_word_list_storage_key,
             function(items) {
-                console.log("ITEMS");
                 var stored_imprecise_word_list = items[t.g_configuration.g_imprecise_word_list_storage_key];
                 if (stored_imprecise_word_list === undefined) {
                     stored_imprecise_word_list = [];
                 }
-                console.log(stored_imprecise_word_list);
                 onDone(stored_imprecise_word_list);
             });
     };

@@ -1,5 +1,5 @@
 /*jslint nomen: true, browser: true, devel: true */
-/*global XPathResult:false, _:false*/
+/*global XPathResult:false, _:false, ImpreciseWordList:false*/
 
 
 var word_marker = {
@@ -11,30 +11,13 @@ var word_marker = {
     g_configuration: {
         "xpath_selector": "//span[@class='comment']/font|//span/p/font[not(.//u)]"
     },
-    /**
-     * Global array containing the default list of imprecise words
-     *
-     * @type {array}
-     */
-    g_default_imprecise_word_list: [
-        "all",
-        "always",
-        "bad",
-        "best",
-        "better",
-        "correct",
-        "difficult",
-        "easy",
-        "everybody",
-        "good",
-        "never",
-        "new",
-        "old",
-        "nobody",
-        "nothing",
-        "some",
-        "worst"
-    ],
+    init: function() {
+        var t = this;
+        this.g_imprecise_word_list = new ImpreciseWordList(
+            function() {
+                t.markdown();
+        });
+    },
     nodes_mathing_xpath_: function(STR_XPATH) {
         var xresult = document.evaluate(STR_XPATH, document, null, XPathResult.ANY_TYPE, null);
         var xnodes = [];
@@ -63,7 +46,8 @@ var word_marker = {
             current_node,
             current_marked_words,
             current_html_words,
-            new_inner_html;
+            new_inner_html,
+            t = this;
 
         for(paragraph_index = 0; paragraph_index < paragraph_list.length; ++paragraph_index) {
             current_node = paragraph_list[paragraph_index];
@@ -71,7 +55,7 @@ var word_marker = {
             current_html_words = this.word_list(current_html);
             current_marked_words = _.map(
                 current_html_words,
-                this.marked_word
+                function(word) { return t.marked_word(word); }
             );
             new_inner_html = current_marked_words.join("");
             current_node.innerHTML = new_inner_html;
@@ -82,7 +66,6 @@ var word_marker = {
      * Split an innterHTML element to its words and returns a list
      */
     word_list: function(innerHTML) {
-        console.log("Splitig: " + innerHTML);
         return innerHTML.split(/\b/);
     },
 
@@ -90,7 +73,7 @@ var word_marker = {
      * Given a word returns it marked if appropiate
      */
     marked_word: function(word) {
-        if (this.g_imprecise_word_list.indexOf(word.toLowerCase()) > -1) {
+        if (this.g_imprecise_word_list.is_word_listed(word)) {
             return "<span class=\"imprecise\">" + word + "</span>";
         } 
         return word;
@@ -98,7 +81,6 @@ var word_marker = {
 
 };
 
-console.log(word_marker.markdown());
-
+word_marker.init();
 
 // vim:tabstop=4 shiftwidth=4 sts=4 expandtab smartindent

@@ -62,11 +62,9 @@ var user_interface = {
 
         //Initialize g_imprecise_word_list from local storage or set it to the
         //default words
-        //this.g_imprecise_word_list = new ImpreciseWordList(this.refresh_current_word_list);
         this.g_imprecise_word_list = new ImpreciseWordList(function(){
             t.refresh_current_word_list();
         });
-        //this.g_imprecise_word_list.onReady = this.refresh_current_word_list;
     },
 };
 

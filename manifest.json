@@ -11,7 +11,7 @@
 		{
 			"matches": ["https://news.ycombinator.com/*"],
 			"css": ["plugin.css"],
-			"js": ["underscore-min.js", "plugin.js"],
+			"js": ["underscore-min.js", "impreciseWordList.js", "plugin.js"],
 			"run-at": "document_idle"
 		}
 	],
