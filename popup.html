@@ -8,13 +8,24 @@
         overflow-x: hidden;
       }
 
-      img {
-        margin: 5px;
-        border: 2px solid black;
-        vertical-align: middle;
-        width: 75px;
-        height: 75px;
-      }
+		.remove-button {
+			clear:both;
+			float:right;
+			height:20px;
+		}
+
+		ul {
+			    list-style-type: none;
+		}
+
+		li {
+			margin-bottom:5px;
+			height: 20px;
+		}
+
+		.dark {
+			background-color:rgb(246, 246, 239);
+		}
     </style>
 
     <!--
@@ -23,9 +34,9 @@
       -
       - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
      -->
-	 <div>
 		 <input type="text" id="word-input-text"/>
 		 <button class="btn-add" id="btn-add">Add</button>
+		 <button class="btn-reset" id="btn-reset">Reset</button>
 	 </div>
     <script src="impreciseWordList.js"></script>
     <script src="popup.js"></script>

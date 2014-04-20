@@ -76,6 +76,11 @@ var ImpreciseWordList = (function() {
         });
     };
 
+    ImpreciseWordList.prototype.reset =  function() {
+        this.g_imprecise_word_list = this.g_configuration.default_imprecise_word_list;
+        this.store_imprecise_word_list();
+    };
+
     ImpreciseWordList.prototype.add_word = function(word) {
         console.assert(this.ready, "Not ready");
         var lower_case_word = word.toLowerCase();

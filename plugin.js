@@ -109,5 +109,5 @@ var word_marker = {
 };
 
 word_marker.init();
-
+chrome.extension.sendMessage("show_page_action");
 // vim:tabstop=4 shiftwidth=4 sts=4 expandtab smartindent

@@ -8,7 +8,7 @@ var user_interface = {
     remove_word_button: function(word) {
         var button_element = document.createElement('button'),
             t = this;
-        button_element.innerText = 'X';
+        button_element.innerHTML = '&times;';
         button_element.onclick = function() {
             var word_element = this.parentElement,
                 word_list_element = word_element.parentElement;
@@ -16,6 +16,7 @@ var user_interface = {
             word_list_element.removeChild(word_element);
             t.g_imprecise_word_list.store_imprecise_word_list();
         };
+        button_element.className = "remove-button";
         return button_element;
     },
     word_element: function(word) {
@@ -39,6 +40,11 @@ var user_interface = {
         for(word_index = 0; word_index < this.g_imprecise_word_list.length(); ++word_index) {
             word_text = this.g_imprecise_word_list.at(word_index);
             word_element = this.word_element(word_text);
+            if ((word_index % 2) === 0) {
+                word_element.className = "dark";
+            } else {
+                word_element.className = "light";
+            }
             word_list_element.appendChild(word_element);
         }
 
@@ -58,6 +64,13 @@ var user_interface = {
             t.g_imprecise_word_list.add_word(input_field_element.value);
             t.refresh_current_word_list();
             t.g_imprecise_word_list.store_imprecise_word_list();
+        };
+
+        var reset_btn = document.getElementById('btn-reset');
+        reset_btn.onclick = function () {
+            console.log("Reseting");
+            t.g_imprecise_word_list.reset();
+            t.refresh_current_word_list();
         };
 
         //Initialize g_imprecise_word_list from local storage or set it to the
