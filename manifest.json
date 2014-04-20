@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
-	"name": "HN Imprecise words",
-	"description": "This extension hihghlights a user defined list of words in hacernews comment pages",
+	"name": "HN Warning Words",
+	"description": "Highlight ambiguous words in HN's comment pages.",
 	"version": "0.0.1",
 	"page_action": {
 		"default_icon": "icon.png",
