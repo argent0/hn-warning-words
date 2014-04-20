@@ -55,9 +55,9 @@ var ImpreciseWordList = (function() {
     ImpreciseWordList.prototype.after_loading_local_storage_imprecise_word_list = function(onDone) {
         var t = this;
         chrome.storage.sync.get(
-            this.g_configuration.g_imprecise_word_list_storage_key,
+            this.g_configuration.imprecise_word_list_storage_key,
             function(items) {
-                var stored_imprecise_word_list = items[t.g_configuration.g_imprecise_word_list_storage_key];
+                var stored_imprecise_word_list = items[t.g_configuration.imprecise_word_list_storage_key];
                 if (stored_imprecise_word_list === undefined) {
                     stored_imprecise_word_list = [];
                 }
@@ -68,7 +68,7 @@ var ImpreciseWordList = (function() {
 
     ImpreciseWordList.prototype.store_imprecise_word_list = function() {
         var object = {};
-        object[this.g_imprecise_word_list_storage_key] = this.g_imprecise_word_list;
+        object[this.g_configuration.imprecise_word_list_storage_key] = this.g_imprecise_word_list;
         chrome.storage.sync.set(
             object,
             function() {

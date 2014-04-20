@@ -1,5 +1,5 @@
 /*jslint nomen: true, browser: true, devel: true */
-/*global XPathResult:false, _:false, ImpreciseWordList:false*/
+/*global XPathResult:false, _:false, ImpreciseWordList:false, chrome:false, $:false*/
 
 
 var word_marker = {
@@ -9,13 +9,32 @@ var word_marker = {
      * @type {Object}
      */
     g_configuration: {
-        "xpath_selector": "//span[@class='comment']/font|//span/p/font[not(.//u)]"
+        "xpath_selector": "//span[@class='comment']/font|//span/p/font[not(.//u)]",
+        "imprecise_word_list_storage_key": "imprecise_word_list"
     },
     init: function() {
         var t = this;
         this.g_imprecise_word_list = new ImpreciseWordList(
             function() {
                 t.markdown();
+                t.track_imprecise_word_list_changes();
+        });
+    },
+    track_imprecise_word_list_changes: function() {
+        var that = this;
+        console.log("Tracking");
+        chrome.storage.onChanged.addListener(function(changes, namespace) {
+            console.log("Detected");
+            console.log(changes);
+            var storage_key = that.g_configuration.imprecise_word_list_storage_key;
+            if (changes.hasOwnProperty(storage_key)){
+                console.log("List changed in %s", namespace);
+                console.log(that.g_imprecise_word_list);
+                that.g_imprecise_word_list.g_imprecise_word_list = changes[storage_key].newValue;
+                console.log(that.g_imprecise_word_list);
+                that.remove_marking();
+                that.markdown();
+            }
         });
     },
     nodes_mathing_xpath_: function(STR_XPATH) {
@@ -47,7 +66,8 @@ var word_marker = {
             current_marked_words,
             current_html_words,
             new_inner_html,
-            t = this;
+            t = this,
+            mark_word_mapper = function(word) { return t.marked_word(word); };
 
         for(paragraph_index = 0; paragraph_index < paragraph_list.length; ++paragraph_index) {
             current_node = paragraph_list[paragraph_index];
@@ -55,7 +75,7 @@ var word_marker = {
             current_html_words = this.word_list(current_html);
             current_marked_words = _.map(
                 current_html_words,
-                function(word) { return t.marked_word(word); }
+                mark_word_mapper
             );
             new_inner_html = current_marked_words.join("");
             current_node.innerHTML = new_inner_html;
@@ -77,6 +97,13 @@ var word_marker = {
             return "<span class=\"imprecise\">" + word + "</span>";
         } 
         return word;
+    },
+
+    /**
+     * Remove markings
+     */
+    remove_marking: function() {
+        $(".imprecise").removeClass("imprecise");
     }
 
 };
