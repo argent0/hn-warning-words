@@ -22,16 +22,10 @@ var word_marker = {
     },
     track_imprecise_word_list_changes: function() {
         var that = this;
-        console.log("Tracking");
-        chrome.storage.onChanged.addListener(function(changes, namespace) {
-            console.log("Detected");
-            console.log(changes);
+        chrome.storage.onChanged.addListener(function(changes) {
             var storage_key = that.g_configuration.imprecise_word_list_storage_key;
             if (changes.hasOwnProperty(storage_key)){
-                console.log("List changed in %s", namespace);
-                console.log(that.g_imprecise_word_list);
                 that.g_imprecise_word_list.g_imprecise_word_list = changes[storage_key].newValue;
-                console.log(that.g_imprecise_word_list);
                 that.remove_marking();
                 that.markdown();
             }
@@ -67,14 +61,22 @@ var word_marker = {
             current_html_words,
             new_inner_html,
             t = this,
-            mark_word_mapper = function(word) { return t.marked_word(word); };
+            mark_word_mapper = function(triplet) { 
+                var is_white_space = triplet[0].match(/\s/),// || (triplet[0] === ">"),
+                    is_null = triplet[0] === "",
+                    trailing_space = triplet[2].match(/\s/);// || (triplet[2] === "<");
+                if (is_white_space || is_null || trailing_space) {
+                    triplet[1] = t.marked_word(triplet[1]);
+                }
+                return triplet[1];
+            };
 
         for(paragraph_index = 0; paragraph_index < paragraph_list.length; ++paragraph_index) {
             current_node = paragraph_list[paragraph_index];
             current_html = current_node.innerHTML;
             current_html_words = this.word_list(current_html);
             current_marked_words = _.map(
-                current_html_words,
+                this.triplets(current_html_words),
                 mark_word_mapper
             );
             new_inner_html = current_marked_words.join("");
@@ -103,8 +105,48 @@ var word_marker = {
      * Remove markings
      */
     remove_marking: function() {
-        $(".imprecise").removeClass("imprecise");
-    }
+        var that = this;
+        $.each( $("span.imprecise"), function () {
+            console.log(this.innerText);
+            var word = this.innerText;
+            if (!that.g_imprecise_word_list.is_word_listed(word)) {
+                $(this).removeClass("imprecise");
+                $(this).addClass("precise");
+            }
+            return true;
+        });
+        $("span.precise").each( function () {
+            var word = $(this).text();
+            if (that.g_imprecise_word_list.is_word_listed(word)) {
+                $(this).removeClass("precise");
+                $(this).addClass("imprecise");
+            }
+            return true;
+        });
+    },
+
+    /**
+     * Array triplets
+     */
+
+    triplets: function(array) {
+        var index,
+            ret = [],
+            null_character = "\u0000";
+        if (array.length > 0) {
+            if (array.length === 1) {
+                ret.push([null_character, array[index], null_character ]);
+                return ret;
+            }
+            ret.push([null_character, array[0], array[1]]);
+            for (index = 1; index < array.length - 1; ++index) {
+                ret.push([array[index-1], array[index], array[index + 1]]);
+            }
+            ret.push([array[array.length - 2], array[array.length - 1], null_character]);
+        }
+
+        return ret;
+    },
 
 };
 
