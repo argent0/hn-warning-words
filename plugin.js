@@ -9,7 +9,8 @@ var word_marker = {
      * @type {Object}
      */
     g_configuration: {
-        "xpath_selector": "//span[@class='comment']/font|//span/p/font[not(.//u)]",
+//      "xpath_selector": "//span[@class='comment']/font|//span/p/font[not(.//u)]",
+        "xpath_selector": "//p",
         "imprecise_word_list_storage_key": "imprecise_word_list"
     },
     init: function() {
