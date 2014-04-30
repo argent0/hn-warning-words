@@ -21,3 +21,5 @@ The default list is:
 "worst"
 
 You can edit the list or reset it to its default value.
+
+The blog-generalization branch does the same for every paragraph in a web page.
