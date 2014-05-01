@@ -1,3 +1,5 @@
+# Description
+
 This extension highlights imprecise words in hackernews comment pages.
 
 The default list is:
@@ -21,3 +23,7 @@ The default list is:
 "worst"
 
 You can edit the list or reset it to its default value.
+
+# Screenshot
+
+![Screenshot](../screenshots/img/screenShot.png?raw=true "Screen Shot")
